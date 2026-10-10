@@ -66,7 +66,7 @@ class BlueStarClimate(ClimateEntity):
         """Register listener for real-time telemetry updates."""
         def _update(thing_id: str):
             if thing_id == self.thing_id:
-                self.schedule_update_ha_state()
+                self.hass.loop.call_soon_threadsafe(self.async_write_ha_state)
 
         self.hub.register_listener(_update)
 
