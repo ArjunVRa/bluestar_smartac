@@ -27,7 +27,8 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up Blue Star sensor entities."""
-    hub: BlueStarHub = hass.data[DOMAIN][entry.entry_id]
+    entry_data = hass.data[DOMAIN][entry.entry_id]
+    hub: BlueStarHub = entry_data["hub"] if isinstance(entry_data, dict) else entry_data
     entities = []
     for tid, info in hub.devices.items():
         entities.append(BlueStarRoomTempSensor(hub, tid, info))

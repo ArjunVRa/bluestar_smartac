@@ -118,6 +118,7 @@ class BlueStarHub:
                         self.cached_states[tid] = {"connected": is_connected, "state": {}}
                     self.cached_states[tid]["connected"] = is_connected
                     self.cached_states[tid]["state"].update(reported)
+                    self._notify_listeners(tid)
             return True
         except Exception as err:
             _LOGGER.error("Failed to fetch devices: %s", err)
