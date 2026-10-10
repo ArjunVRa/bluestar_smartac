@@ -71,13 +71,14 @@ class BlueStarHub:
             self.user_name = user.get("name", "User")
             self.user_id = user.get("user_id")
 
-            mi_b64 = user.get("mi", "")
+            mi_b64 = data.get("mi", "") or user.get("mi", "")
             if mi_b64:
                 parts = base64.b64decode(mi_b64).decode("utf-8").split("::")
                 if len(parts) >= 3:
                     self.aws_endpoint = parts[0]
                     self.aws_access_key = parts[1]
                     self.aws_secret_key = parts[2]
+                    _LOGGER.info("AWS IoT Core Endpoint: %s", self.aws_endpoint)
 
                     self.boto3_iot = boto3.client(
                         "iot-data",
@@ -193,6 +194,7 @@ class BlueStarHub:
         desired["src"] = "anmq"
         desired["ts"] = now_ts
 
+        _LOGGER.info("Dispatching command to %s: %s", thing_id, desired)
         payload = json.dumps({"state": {"desired": desired}})
         try:
             if self.boto3_iot:
@@ -200,12 +202,16 @@ class BlueStarHub:
                     thingName=thing_id,
                     payload=payload
                 )
+                _LOGGER.info("Command sent via boto3 to %s successfully", thing_id)
             elif self.aws_mqtt_conn:
                 self.aws_mqtt_conn.publish(
                     topic=f"$aws/things/{thing_id}/shadow/update",
                     payload=payload,
                     qos=aws_crt_mqtt.QoS.AT_LEAST_ONCE
                 )
+                _LOGGER.info("Command published via AWS MQTT to %s", thing_id)
+            else:
+                _LOGGER.warning("No AWS IoT client available to send command to %s", thing_id)
         except Exception as err:
             _LOGGER.error("Failed to send command to %s: %s", thing_id, err)
 
