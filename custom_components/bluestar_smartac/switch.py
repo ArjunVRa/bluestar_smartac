@@ -27,6 +27,8 @@ async def async_setup_entry(
         entities.append(BlueStarBuzzerSwitch(hub, tid, info))
         entities.append(BlueStarHorizontalSwingSwitch(hub, tid, info))
         entities.append(BlueStarEcoSwitch(hub, tid, info))
+        entities.append(BlueStarSleepSwitch(hub, tid, info))
+        entities.append(BlueStarSelfCleanSwitch(hub, tid, info))
     async_add_entities(entities)
 
 
@@ -191,4 +193,53 @@ class BlueStarEcoSwitch(_BaseBlueStarSwitch):
             self.thing_id,
             {"eco": {"value": 0, "fspd": current_fspd}, "lcmd": "eco"},
         )
+
+
+class BlueStarSleepSwitch(_BaseBlueStarSwitch):
+    _attr_name = "Comfort Sleep"
+    _attr_icon = "mdi:bed-clock"
+
+    def __init__(self, hub: BlueStarHub, thing_id: str, device_info: dict[str, Any]) -> None:
+        super().__init__(hub, thing_id, device_info)
+        self._attr_unique_id = f"bluestar_{thing_id.lower()}_sleep"
+
+    @property
+    def is_on(self) -> bool:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        return st.get("sleep", 0) != 0
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self.hass.async_add_executor_job(
+            self.hub.send_command, self.thing_id, {"sleep": 1, "lcmd": "sleep"}
+        )
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self.hass.async_add_executor_job(
+            self.hub.send_command, self.thing_id, {"sleep": 0, "lcmd": "sleep"}
+        )
+
+
+class BlueStarSelfCleanSwitch(_BaseBlueStarSwitch):
+    _attr_name = "Self Clean"
+    _attr_icon = "mdi:shimmer"
+
+    def __init__(self, hub: BlueStarHub, thing_id: str, device_info: dict[str, Any]) -> None:
+        super().__init__(hub, thing_id, device_info)
+        self._attr_unique_id = f"bluestar_{thing_id.lower()}_self_clean"
+
+    @property
+    def is_on(self) -> bool:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        return st.get("s_clean", 0) != 0
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self.hass.async_add_executor_job(
+            self.hub.send_command, self.thing_id, {"s_clean": 1, "lcmd": "s_clean"}
+        )
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self.hass.async_add_executor_job(
+            self.hub.send_command, self.thing_id, {"s_clean": 0, "lcmd": "s_clean"}
+        )
+
 

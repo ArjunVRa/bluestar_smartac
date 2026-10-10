@@ -28,6 +28,8 @@ No external bridges, Python daemons, or separate MQTT servers required — every
   - **Diagnostic Error Code**: Real-time hardware/sensor fault diagnostics (e.g. `None`, `E1`, `EC`).
   - **Eco Capacity Level**: Active capacity tier indicator.
 - **Switches**:
+  - **Comfort Sleep Mode Switch**: Automatically adjusts cooling temperature curve through the night for optimal sleep comfort and energy savings.
+  - **Self Clean Mode Switch**: Runs an automated coil cleaning and moisture removal cycle to eliminate dust and mold.
   - **Horizontal Swing Switch**: Toggle continuous left-right motorized oscillation.
   - **Eco Mode Switch**: Quick on/off toggle for Eco mode.
   - **LED Display Toggle**: Turn indoor unit front panel temperature display ON/OFF.
