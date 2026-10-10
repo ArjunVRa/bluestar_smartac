@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Blue Star Smart AC Login",
+        "description": "Enter your Blue Star Smart AC account credentials.",
+        "data": {
+          "auth_id": "Phone Number or Email",
+          "password": "Password",
+          "is_email": "Account is an Email (Uncheck if using phone number)"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid Blue Star credentials or failed to contact cloud.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This account is already configured in Home Assistant."
+    }
+  }
+}
