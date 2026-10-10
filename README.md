@@ -17,17 +17,19 @@ No external bridges, Python daemons, or separate MQTT servers required — every
   - HVAC Modes: `cool`, `dry`, `fan_only`, `auto`, `off`.
   - Target temperature control with 1°C precision (`16°C` – `30°C`).
   - Fan speeds: `low`, `medium`, `high`, `turbo`, `auto`.
-  - **Vertical Louver Swing**: Step-by-step angle control (`1` to `5`) and `off`.
+  - **Vertical Louver Swing**: Both full **`auto`** continuous oscillation (top-to-bottom) and 5 step-by-step fixed angles (`1` to `5`), plus `off`.
+- **Selects**:
+  - **Eco Capacity Mode**: Dropdown selector for 5-in-1 / 6-in-1 convertible capacity tiers (`Off (Default)`, `110% (Super Cool)`, `100%`, `80%`, `60%`, `40%`).
 - **Sensors**:
   - Current Room Temperature (from AC ambient thermistor).
   - Target Temperature.
   - Total Compressor Run Hours.
   - WiFi RSSI Signal Strength.
   - **Diagnostic Error Code**: Real-time hardware/sensor fault diagnostics (e.g. `None`, `E1`, `EC`).
-  - **Eco Capacity Level**: 5-in-1 Eco level readout (`off`, `100%`, `80%`, `60%`, `40%`).
+  - **Eco Capacity Level**: Active capacity tier indicator.
 - **Switches**:
   - **Horizontal Swing Switch**: Toggle continuous left-right motorized oscillation.
-  - **Eco Mode Switch**: Toggle 5-in-1 Eco power-saving mode.
+  - **Eco Mode Switch**: Quick on/off toggle for Eco mode.
   - **LED Display Toggle**: Turn indoor unit front panel temperature display ON/OFF.
   - **Turbo Mode Switch**: Instant powerful cooling boost.
   - **Buzzer Beep Toggle**: Enable or mute remote confirmation beeps.

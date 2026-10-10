@@ -40,18 +40,23 @@ HA_TO_BS_FAN = {
     "auto": 7,
 }
 
-# Vertical Swing Mappings (0: Off/Fixed, 1-5: Fixed Level Louver Angles L1-L5)
+# Vertical Swing Mappings:
+# 0: Off / Fixed
+# 1-5: Fixed Level Louver Angles L1-L5
+# 6: Auto Continuous Swing (oscillates top to bottom and bottom to top)
 SWING_OFF = "off"
+SWING_AUTO = "auto"
 SWING_LEVEL_1 = "1"
 SWING_LEVEL_2 = "2"
 SWING_LEVEL_3 = "3"
 SWING_LEVEL_4 = "4"
 SWING_LEVEL_5 = "5"
 
-SWING_MODES = [SWING_OFF, SWING_LEVEL_1, SWING_LEVEL_2, SWING_LEVEL_3, SWING_LEVEL_4, SWING_LEVEL_5]
+SWING_MODES = [SWING_OFF, SWING_AUTO, SWING_LEVEL_1, SWING_LEVEL_2, SWING_LEVEL_3, SWING_LEVEL_4, SWING_LEVEL_5]
 
 BS_TO_HA_SWING = {
     0: SWING_OFF,
+    6: SWING_AUTO,
     1: SWING_LEVEL_1,
     2: SWING_LEVEL_2,
     3: SWING_LEVEL_3,
@@ -61,6 +66,7 @@ BS_TO_HA_SWING = {
 
 HA_TO_BS_SWING = {
     SWING_OFF: 0,
+    SWING_AUTO: 6,
     SWING_LEVEL_1: 1,
     SWING_LEVEL_2: 2,
     SWING_LEVEL_3: 3,
@@ -83,14 +89,16 @@ HA_TO_BS_SWING_H = {
     SWING_HORIZONTAL_ON: 6,
 }
 
-# 5-in-1 Eco Capacity Preset Modes: 0 = Off/Default, 1 = 100%, 2 = 80%, 3 = 60%, 4 = 40%
-ECO_OFF = "off"
+# 5-in-1 / 6-in-1 Convertible Eco Capacity Preset Modes:
+# 0 = Off/Default, 1 = 100%, 2 = 80%, 3 = 60%, 4 = 40%, 5 = 110% (Hyper / Extra Cool)
+ECO_OFF = "Off (Default)"
+ECO_110 = "110% (Super Cool)"
 ECO_100 = "100%"
 ECO_80 = "80%"
 ECO_60 = "60%"
 ECO_40 = "40%"
 
-ECO_OPTIONS = [ECO_OFF, ECO_100, ECO_80, ECO_60, ECO_40]
+ECO_OPTIONS = [ECO_OFF, ECO_110, ECO_100, ECO_80, ECO_60, ECO_40]
 
 BS_TO_ECO = {
     0: ECO_OFF,
@@ -98,10 +106,12 @@ BS_TO_ECO = {
     2: ECO_80,
     3: ECO_60,
     4: ECO_40,
+    5: ECO_110,
 }
 
 ECO_TO_BS = {
     ECO_OFF: 0,
+    ECO_110: 5,
     ECO_100: 1,
     ECO_80: 2,
     ECO_60: 3,
