@@ -148,16 +148,17 @@ class BlueStarHorizontalSwingSwitch(_BaseBlueStarSwitch):
     @property
     def is_on(self) -> bool:
         st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
-        return st.get("hswing", 0) != 0
+        # Model config toggle: 0 = On (swinging), 6 = Off
+        return st.get("hswing", 6) == 0
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         await self.hass.async_add_executor_job(
-            self.hub.send_command, self.thing_id, {"hswing": 6, "lcmd": "hswing"}
+            self.hub.send_command, self.thing_id, {"hswing": 0, "lcmd": "hswing"}
         )
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         await self.hass.async_add_executor_job(
-            self.hub.send_command, self.thing_id, {"hswing": 0, "lcmd": "hswing"}
+            self.hub.send_command, self.thing_id, {"hswing": 6, "lcmd": "hswing"}
         )
 
 

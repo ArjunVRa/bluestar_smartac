@@ -133,7 +133,7 @@ class BlueStarClimate(ClimateEntity):
     def swing_mode(self) -> str | None:
         """Return the current vertical swing mode/louver position."""
         st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
-        vswing = st.get("vswing", 0)
+        vswing = st.get("vswing", 6)
         return BS_TO_HA_SWING.get(vswing, "off")
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
@@ -188,7 +188,7 @@ class BlueStarClimate(ClimateEntity):
 
     async def async_set_swing_mode(self, swing_mode: str) -> None:
         """Set vertical swing / step louver position."""
-        vswing = HA_TO_BS_SWING.get(swing_mode, 0)
+        vswing = HA_TO_BS_SWING.get(swing_mode, 6)
         await self.hass.async_add_executor_job(
             self.hub.send_command,
             self.thing_id,

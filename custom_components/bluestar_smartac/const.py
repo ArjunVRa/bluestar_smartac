@@ -41,9 +41,9 @@ HA_TO_BS_FAN = {
 }
 
 # Vertical Swing Mappings:
-# 0: Off / Fixed
+# 6: Off / Fixed
+# 0: Auto Continuous Swing (oscillates top to bottom and bottom to top)
 # 1-5: Fixed Level Louver Angles L1-L5
-# 6: Auto Continuous Swing (oscillates top to bottom and bottom to top)
 SWING_OFF = "off"
 SWING_AUTO = "auto"
 SWING_LEVEL_1 = "1"
@@ -55,8 +55,8 @@ SWING_LEVEL_5 = "5"
 SWING_MODES = [SWING_OFF, SWING_AUTO, SWING_LEVEL_1, SWING_LEVEL_2, SWING_LEVEL_3, SWING_LEVEL_4, SWING_LEVEL_5]
 
 BS_TO_HA_SWING = {
-    0: SWING_OFF,
-    6: SWING_AUTO,
+    6: SWING_OFF,
+    0: SWING_AUTO,
     1: SWING_LEVEL_1,
     2: SWING_LEVEL_2,
     3: SWING_LEVEL_3,
@@ -65,8 +65,8 @@ BS_TO_HA_SWING = {
 }
 
 HA_TO_BS_SWING = {
-    SWING_OFF: 0,
-    SWING_AUTO: 6,
+    SWING_OFF: 6,
+    SWING_AUTO: 0,
     SWING_LEVEL_1: 1,
     SWING_LEVEL_2: 2,
     SWING_LEVEL_3: 3,
@@ -74,19 +74,19 @@ HA_TO_BS_SWING = {
     SWING_LEVEL_5: 5,
 }
 
-# Horizontal Swing (0: Off, 6: On)
+# Horizontal Swing (6: Off, 0: On)
 SWING_HORIZONTAL_OFF = "off"
 SWING_HORIZONTAL_ON = "on"
 SWING_HORIZONTAL_MODES = [SWING_HORIZONTAL_OFF, SWING_HORIZONTAL_ON]
 
 BS_TO_HA_SWING_H = {
-    0: SWING_HORIZONTAL_OFF,
-    6: SWING_HORIZONTAL_ON,
+    6: SWING_HORIZONTAL_OFF,
+    0: SWING_HORIZONTAL_ON,
 }
 
 HA_TO_BS_SWING_H = {
-    SWING_HORIZONTAL_OFF: 0,
-    SWING_HORIZONTAL_ON: 6,
+    SWING_HORIZONTAL_OFF: 6,
+    SWING_HORIZONTAL_ON: 0,
 }
 
 # 5-in-1 / 6-in-1 Convertible Eco Capacity Preset Modes:
