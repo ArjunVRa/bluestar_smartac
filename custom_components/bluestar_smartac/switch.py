@@ -25,6 +25,8 @@ async def async_setup_entry(
         entities.append(BlueStarDisplaySwitch(hub, tid, info))
         entities.append(BlueStarTurboSwitch(hub, tid, info))
         entities.append(BlueStarBuzzerSwitch(hub, tid, info))
+        entities.append(BlueStarHorizontalSwingSwitch(hub, tid, info))
+        entities.append(BlueStarEcoSwitch(hub, tid, info))
     async_add_entities(entities)
 
 
@@ -131,3 +133,62 @@ class BlueStarBuzzerSwitch(_BaseBlueStarSwitch):
         await self.hass.async_add_executor_job(
             self.hub.send_command, self.thing_id, {"m_buz": 0, "lcmd": "m_buz"}
         )
+
+
+class BlueStarHorizontalSwingSwitch(_BaseBlueStarSwitch):
+    _attr_name = "Horizontal Swing"
+    _attr_icon = "mdi:arrow-left-right"
+
+    def __init__(self, hub: BlueStarHub, thing_id: str, device_info: dict[str, Any]) -> None:
+        super().__init__(hub, thing_id, device_info)
+        self._attr_unique_id = f"bluestar_{thing_id.lower()}_hswing"
+
+    @property
+    def is_on(self) -> bool:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        return st.get("hswing", 0) != 0
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self.hass.async_add_executor_job(
+            self.hub.send_command, self.thing_id, {"hswing": 6, "lcmd": "hswing"}
+        )
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self.hass.async_add_executor_job(
+            self.hub.send_command, self.thing_id, {"hswing": 0, "lcmd": "hswing"}
+        )
+
+
+class BlueStarEcoSwitch(_BaseBlueStarSwitch):
+    _attr_name = "Eco Mode"
+    _attr_icon = "mdi:leaf"
+
+    def __init__(self, hub: BlueStarHub, thing_id: str, device_info: dict[str, Any]) -> None:
+        super().__init__(hub, thing_id, device_info)
+        self._attr_unique_id = f"bluestar_{thing_id.lower()}_eco"
+
+    @property
+    def is_on(self) -> bool:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        eco_raw = st.get("eco", 0)
+        eco_val = eco_raw.get("value", 0) if isinstance(eco_raw, dict) else eco_raw
+        return eco_val != 0
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        current_fspd = st.get("fspd", 3)
+        await self.hass.async_add_executor_job(
+            self.hub.send_command,
+            self.thing_id,
+            {"eco": {"value": 1, "fspd": current_fspd}, "lcmd": "eco"},
+        )
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        current_fspd = st.get("fspd", 3)
+        await self.hass.async_add_executor_job(
+            self.hub.send_command,
+            self.thing_id,
+            {"eco": {"value": 0, "fspd": current_fspd}, "lcmd": "eco"},
+        )
+

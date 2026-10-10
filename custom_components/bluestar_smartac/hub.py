@@ -224,8 +224,9 @@ class BlueStarHub:
                 cached_updates["mode"] = m_dict.get("value")
                 if "stemp" in m_dict:
                     cached_updates["stemp"] = m_dict["stemp"]
-                if "fspd" in m_dict:
-                    cached_updates["fspd"] = m_dict["fspd"]
+            if "eco" in cached_updates and isinstance(cached_updates["eco"], dict):
+                e_dict = cached_updates.pop("eco")
+                cached_updates["eco"] = e_dict.get("value", 0)
             cached_updates.pop("lcmd", None)
             self.cached_states[thing_id]["state"].update(cached_updates)
             self._notify_listeners(thing_id)

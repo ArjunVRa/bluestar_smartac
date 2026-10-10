@@ -39,3 +39,88 @@ HA_TO_BS_FAN = {
     "turbo": 6,
     "auto": 7,
 }
+
+# Vertical Swing Mappings (0: Off/Fixed, 1-5: Fixed Level Louver Angles L1-L5)
+SWING_OFF = "off"
+SWING_LEVEL_1 = "1"
+SWING_LEVEL_2 = "2"
+SWING_LEVEL_3 = "3"
+SWING_LEVEL_4 = "4"
+SWING_LEVEL_5 = "5"
+
+SWING_MODES = [SWING_OFF, SWING_LEVEL_1, SWING_LEVEL_2, SWING_LEVEL_3, SWING_LEVEL_4, SWING_LEVEL_5]
+
+BS_TO_HA_SWING = {
+    0: SWING_OFF,
+    1: SWING_LEVEL_1,
+    2: SWING_LEVEL_2,
+    3: SWING_LEVEL_3,
+    4: SWING_LEVEL_4,
+    5: SWING_LEVEL_5,
+}
+
+HA_TO_BS_SWING = {
+    SWING_OFF: 0,
+    SWING_LEVEL_1: 1,
+    SWING_LEVEL_2: 2,
+    SWING_LEVEL_3: 3,
+    SWING_LEVEL_4: 4,
+    SWING_LEVEL_5: 5,
+}
+
+# Horizontal Swing (0: Off, 6: On)
+SWING_HORIZONTAL_OFF = "off"
+SWING_HORIZONTAL_ON = "on"
+SWING_HORIZONTAL_MODES = [SWING_HORIZONTAL_OFF, SWING_HORIZONTAL_ON]
+
+BS_TO_HA_SWING_H = {
+    0: SWING_HORIZONTAL_OFF,
+    6: SWING_HORIZONTAL_ON,
+}
+
+HA_TO_BS_SWING_H = {
+    SWING_HORIZONTAL_OFF: 0,
+    SWING_HORIZONTAL_ON: 6,
+}
+
+# 5-in-1 Eco Capacity Preset Modes: 0 = Off/Default, 1 = 100%, 2 = 80%, 3 = 60%, 4 = 40%
+ECO_OFF = "off"
+ECO_100 = "100%"
+ECO_80 = "80%"
+ECO_60 = "60%"
+ECO_40 = "40%"
+
+ECO_OPTIONS = [ECO_OFF, ECO_100, ECO_80, ECO_60, ECO_40]
+
+BS_TO_ECO = {
+    0: ECO_OFF,
+    1: ECO_100,
+    2: ECO_80,
+    3: ECO_60,
+    4: ECO_40,
+}
+
+ECO_TO_BS = {
+    ECO_OFF: 0,
+    ECO_100: 1,
+    ECO_80: 2,
+    ECO_60: 3,
+    ECO_40: 4,
+}
+
+# Error code mappings
+ERROR_CODES = {
+    0: "None",
+    1: "E1 - Indoor Room Sensor Failure",
+    2: "E2 - Indoor Coil Sensor Failure",
+    3: "E3 - Outdoor Coil Sensor Failure",
+    4: "E4 - Outdoor Ambient Sensor Failure",
+    5: "E5 - Indoor Fan Motor Error",
+    6: "EC - Refrigerant Leakage Detected",
+    7: "E6 - Communication Fault",
+    8: "F1 - Inverter Module IPM Fault",
+    9: "F2 - Compressor Overcurrent / Stall",
+    10: "F3 - High Discharge Pipe Temp",
+    11: "P1 - High Voltage Protection",
+    12: "P2 - Low Voltage Protection",
+}

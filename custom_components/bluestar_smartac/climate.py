@@ -15,7 +15,16 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import BS_TO_HA_FAN, BS_TO_HA_MODE, DOMAIN, HA_TO_BS_FAN, HA_TO_BS_MODE
+from .const import (
+    BS_TO_HA_FAN,
+    BS_TO_HA_MODE,
+    BS_TO_HA_SWING,
+    DOMAIN,
+    HA_TO_BS_FAN,
+    HA_TO_BS_MODE,
+    HA_TO_BS_SWING,
+    SWING_MODES,
+)
 from .hub import BlueStarHub
 
 _LOGGER = logging.getLogger(__name__)
@@ -48,9 +57,11 @@ class BlueStarClimate(ClimateEntity):
         HVACMode.AUTO,
     ]
     _attr_fan_modes = ["auto", "low", "medium", "high", "turbo"]
+    _attr_swing_modes = SWING_MODES
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
         | ClimateEntityFeature.FAN_MODE
+        | ClimateEntityFeature.SWING_MODE
         | ClimateEntityFeature.TURN_OFF
         | ClimateEntityFeature.TURN_ON
     )
@@ -118,6 +129,13 @@ class BlueStarClimate(ClimateEntity):
         fspd = st.get("fspd", 7)
         return BS_TO_HA_FAN.get(fspd, "auto")
 
+    @property
+    def swing_mode(self) -> str | None:
+        """Return the current vertical swing mode/louver position."""
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        vswing = st.get("vswing", 0)
+        return BS_TO_HA_SWING.get(vswing, "off")
+
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new HVAC mode with exact firmware constraints."""
         if hvac_mode == HVACMode.OFF:
@@ -166,6 +184,15 @@ class BlueStarClimate(ClimateEntity):
             self.hub.send_command,
             self.thing_id,
             {"fspd": fspd, "lcmd": "fspd"},
+        )
+
+    async def async_set_swing_mode(self, swing_mode: str) -> None:
+        """Set vertical swing / step louver position."""
+        vswing = HA_TO_BS_SWING.get(swing_mode, 0)
+        await self.hass.async_add_executor_job(
+            self.hub.send_command,
+            self.thing_id,
+            {"vswing": vswing, "lcmd": "vswing"},
         )
 
     async def async_turn_on(self) -> None:

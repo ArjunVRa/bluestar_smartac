@@ -19,7 +19,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import BS_TO_ECO, DOMAIN, ERROR_CODES
 from .hub import BlueStarHub
 
 
@@ -35,6 +35,8 @@ async def async_setup_entry(
         entities.append(BlueStarTargetTempSensor(hub, tid, info))
         entities.append(BlueStarCompressorHoursSensor(hub, tid, info))
         entities.append(BlueStarRssiSensor(hub, tid, info))
+        entities.append(BlueStarErrorSensor(hub, tid, info))
+        entities.append(BlueStarEcoSensor(hub, tid, info))
     async_add_entities(entities)
 
 
@@ -139,3 +141,37 @@ class BlueStarRssiSensor(_BaseBlueStarSensor):
     def native_value(self) -> int | None:
         st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
         return st.get("rssi", 0)
+
+
+class BlueStarErrorSensor(_BaseBlueStarSensor):
+    _attr_name = "Diagnostic Error"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:alert-circle-outline"
+
+    def __init__(self, hub: BlueStarHub, thing_id: str, device_info: dict[str, Any]) -> None:
+        super().__init__(hub, thing_id, device_info)
+        self._attr_unique_id = f"bluestar_{thing_id.lower()}_error_code"
+
+    @property
+    def native_value(self) -> str:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        err_val = st.get("err", 0)
+        return ERROR_CODES.get(err_val, f"E{err_val}" if err_val else "None")
+
+
+class BlueStarEcoSensor(_BaseBlueStarSensor):
+    _attr_name = "Eco Capacity Level"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:leaf"
+
+    def __init__(self, hub: BlueStarHub, thing_id: str, device_info: dict[str, Any]) -> None:
+        super().__init__(hub, thing_id, device_info)
+        self._attr_unique_id = f"bluestar_{thing_id.lower()}_eco_level"
+
+    @property
+    def native_value(self) -> str:
+        st = self.hub.cached_states.get(self.thing_id, {}).get("state", {})
+        eco_raw = st.get("eco", 0)
+        eco_val = eco_raw.get("value", 0) if isinstance(eco_raw, dict) else eco_raw
+        return BS_TO_ECO.get(eco_val, "off")
+
